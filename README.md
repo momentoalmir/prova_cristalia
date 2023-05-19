@@ -89,13 +89,12 @@ alfabética. As informações a serem listadas são o nome do funcionário e seu
 | 10     | Analista de RH       |
 
 ```sql
-CREATE TABLE Func (
-    empresa INT NOT NULL,
-    RE INT NOT NULL,
+
+
+CREATE TABLE Empresa (
+    codigo INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(50) NOT NULL,
-    cargo INT NOT NULL,
-    disponibilidade ENUM('A', 'D') NOT NULL,
-    PRIMARY KEY (empresa, RE)
+    PRIMARY KEY (codigo)
 );
 
 CREATE TABLE Cargo (
@@ -104,17 +103,24 @@ CREATE TABLE Cargo (
     PRIMARY KEY (codigo)
 );
 
+CREATE TABLE Func (
+    empresa INT NOT NULL,
+    RE INT NOT NULL,
+    nome VARCHAR(50) NOT NULL,
+    cargo INT NOT NULL,
+    disponibilidade ENUM('A', 'D') NOT NULL,
+    PRIMARY KEY (RE),
+    Foreign Key (empresa) references Empresa(codigo),
+    Foreign Key (cargo) references Cargo(codigo)
+);
+
 -- Inserir dados
 
-INSERT INTO Func (empresa, RE, nome, cargo, disponibilidade)
+INSERT INTO Empresa (codigo, nome)
 VALUES
-    (1, 1245, 'Maria da Silva', 6, 'A'),
-    (1, 584, 'Benedito Costa', 10, 'A'),
-    (2, 847, 'Joaquim Barbosa', 3, 'A'),
-    (1, 54, 'Antonio Pereira', 7, 'D'),
-    (1, 84, 'Joao Gomes', 9, 'A'),
-    (2, 658, 'Luis Montanha', 7, 'A'),
-    (1, 841, 'Isabel Silva', 9, 'D');
+	(1, 'Cristalia'),
+  (2, 'Outra Empresa'),
+  (3, '1');
 
 INSERT INTO Cargo (codigo, descricao)
 VALUES
@@ -129,6 +135,18 @@ VALUES
     (9, 'Porteiro'),
     (10, 'Analista de RH');
 
+INSERT INTO Func (empresa, RE, nome, cargo, disponibilidade)
+VALUES
+    (1, 1245, 'Maria da Silva', 6, 'A'),
+    (1, 584, 'Benedito Costa', 10, 'A'),
+    (2, 847, 'Joaquim Barbosa', 3, 'A'),
+    (1, 54, 'Antonio Pereira', 7, 'D'),
+    (1, 84, 'Joao Gomes', 9, 'A'),
+    (2, 658, 'Luis Montanha', 7, 'A'),
+    (1, 841, 'Isabel Silva', 9, 'D');
+
+
+
 -- Escrever comando SQL para listar todos os funcionários “(A)tivos” da empresa “1” em ordem
 -- alfabética. As informações a serem listadas são o nome do funcionário e seu respectivo cargo.
 
@@ -137,4 +155,12 @@ FROM Func f
 INNER JOIN Cargo c ON f.cargo = c.codigo
 WHERE f.empresa = 1 AND f.disponibilidade = 'A'
 ORDER BY f.nome;
+
+-- Se a intenção do exercício for filtrar pelo nome da empresa, então a consulta ficaria assim:
+
+SELECT f.nome, c.descricao
+FROM Func f
+INNER JOIN Cargo c ON f.cargo = c.codigo
+INNER JOIN Empresa e ON f.empresa = e.codigo
+WHERE e.nome = '1' AND f.disponibilidade = 'A'
 ```
