@@ -32,6 +32,31 @@ Recomendado:
 - Utilizar Bootstrap para complementar o visual
 - Fazer uso de requisições Ajax para atualizar informações sem recarregar a página
 
+Exemplo:
+```js
+
+  useEffect(() => {
+    fetchData();
+
+    const interval = setInterval(() => {
+      fetchData();
+    }, 5000); // Consulta a cada 5 segundos (ajuste conforme necessário)
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('URL_DA_API');
+      setData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+```
+
 # 3 - Teste de SQL
 
 Escrever comando SQL para listar todos os funcionários “(A)tivos” da empresa “1” em ordem
