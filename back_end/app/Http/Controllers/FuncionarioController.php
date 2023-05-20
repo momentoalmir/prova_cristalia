@@ -69,22 +69,21 @@ class FuncionarioController extends Controller
             $salarioAtual = $funcionario->salario_atual;
 
             if ($salarioAtual < 1500) {
-                $correcao = $salarioAtual * $percentual;
+                $correcao = $salarioAtual * ($percentual / 100);
                 $salarioCorrigido = $salarioAtual + $correcao + $bonus;
             } else {
-                $correcao = $salarioAtual * $percentual;
-
+                $correcao = $salarioAtual * ($percentual / 100);
                 $salarioCorrigido = $salarioAtual + $correcao;
             }
 
             $funcionario->salario_anterior = $salarioAtual;
-            $funcionario->salario_corrigido = $salarioCorrigido;
+            $funcionario->salario_atual = $salarioCorrigido;
             $funcionario->save();
         }
 
         return response()->json([
             'message' => 'Salários ajustados com sucesso!',
-            'status' => 'success'
+            'status' => true
         ], 200);
     }
 }

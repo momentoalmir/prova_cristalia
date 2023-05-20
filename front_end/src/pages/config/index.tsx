@@ -1,21 +1,27 @@
-'use client'
-
-// import Link from 'next/link';
-// import nookies from 'nookies';
 import { useEffect, useState } from "react";
 
 type ParamsType = {
     salario?: string
 }
 
+export const getConfigParams = () => {
+    const localStorage = window.localStorage;
+    const params: ParamsType = JSON.parse(localStorage.getItem('params') || '{}');
+    return params;
+}
+
+export const setConfigParams = (params: ParamsType) => {
+    const localStorage = window.localStorage;
+    localStorage.setItem('params', JSON.stringify(params));
+}
+
 export default function Config() {
     const [salario, setSalario] = useState<string>();
-    // const cookies = nookies.get(null, 'params');
 
     useEffect(() => {
-        // const params: ParamsType = JSON.parse(cookies.params || '{}');
         // Load params
-        // setSalario(params.salario);
+        const params: ParamsType = getConfigParams();
+        setSalario(params?.salario || 'salario_atual');
     }, [])
 
     function onClickSalvar(e: React.FormEvent<HTMLFormElement>) {
@@ -26,10 +32,7 @@ export default function Config() {
             return;
         }
 
-        // // Save params to Cookies
-        // nookies.set(null, 'params', JSON.stringify({ salario }), {
-        //     maxAge: 30 * 24 * 60 * 60, // 30 days
-        // });
+        setConfigParams({ salario });
 
         alert('Parâmetros salvos com sucesso!');
     }
