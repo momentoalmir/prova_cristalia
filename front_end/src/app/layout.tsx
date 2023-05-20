@@ -1,7 +1,7 @@
 import Header from '@/components/Headers'
 
-import '../assets/bootstrap-icons/font/bootstrap-icons.min.css'
-import '../assets/bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-icons/font/bootstrap-icons.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './global.css'
 
 export const metadata = {
