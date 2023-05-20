@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cargos', function (Blueprint $table) {
-            $table->unsignedBigInteger('codigo');
+            $table->id();
             $table->string('descricao');
 
-            $table->primary('codigo');
             $table->timestamps();
         });
     }

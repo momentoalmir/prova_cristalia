@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('funcionarios', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('empresa');
-            $table->unsignedBigInteger('RE');
+            $table->unsignedBigInteger('RE')->unique();
             $table->string('nome');
             $table->unsignedBigInteger('cargo');
             $table->enum('status', ['A', 'D']);
 
-            $table->primary('RE');
             $table->foreign('empresa')->references('id')->on('empresas');
-            $table->foreign('cargo')->references('codigo')->on('cargos');
+            $table->foreign('cargo')->references('id')->on('cargos');
 
             $table->timestamps();
         });

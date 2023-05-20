@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\FuncionarioResource;
 use App\Models\Funcionario;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,9 @@ class FuncionarioController extends Controller
      */
     public function index()
     {
-        $func = Funcionario::where('status', 'A')->get();
+        $func = Funcionario::with('cargo', 'empresa')
+            ->where('status', 'A')->get();
+
         return response()->json($func);
     }
 

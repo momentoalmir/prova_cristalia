@@ -14,16 +14,16 @@ class CargosTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('cargos')->insert([
-            ['codigo' => 1, 'descricao' => 'Jardineiro'],
-            ['codigo' => 2, 'descricao' => 'Operador de Produção'],
-            ['codigo' => 3, 'descricao' => 'Analista Fiscal'],
-            ['codigo' => 4, 'descricao' => 'Auxiliar de escritorio'],
-            ['codigo' => 5, 'descricao' => 'Mecanico'],
-            ['codigo' => 6, 'descricao' => 'Analista de Sistemas'],
-            ['codigo' => 7, 'descricao' => 'Gerente'],
-            ['codigo' => 8, 'descricao' => 'Diretor'],
-            ['codigo' => 9, 'descricao' => 'Porteiro'],
-            ['codigo' => 10, 'descricao' => 'Analista de RH']
+            [ 'descricao' => 'Jardineiro'],
+            [ 'descricao' => 'Operador de Produção'],
+            [ 'descricao' => 'Analista Fiscal'],
+            [ 'descricao' => 'Auxiliar de escritorio'],
+            [ 'descricao' => 'Mecanico'],
+            [ 'descricao' => 'Analista de Sistemas'],
+            [ 'descricao' => 'Gerente'],
+            [ 'descricao' => 'Diretor'],
+            [ 'descricao' => 'Porteiro'],
+            [ 'descricao' => 'Analista de RH']
         ]);
     }
 }
