@@ -1,7 +1,7 @@
 'use client'
 
-import Link from 'next/link';
-import nookies from 'nookies';
+// import Link from 'next/link';
+// import nookies from 'nookies';
 import { useEffect, useState } from "react";
 
 type ParamsType = {
@@ -10,12 +10,12 @@ type ParamsType = {
 
 export default function Config() {
     const [salario, setSalario] = useState<string>();
-    const cookies = nookies.get(null, 'params');
+    // const cookies = nookies.get(null, 'params');
 
     useEffect(() => {
-        const params: ParamsType = JSON.parse(cookies.params || '{}');
+        // const params: ParamsType = JSON.parse(cookies.params || '{}');
         // Load params
-        setSalario(params.salario);
+        // setSalario(params.salario);
     }, [])
 
     function onClickSalvar(e: React.FormEvent<HTMLFormElement>) {
@@ -26,10 +26,10 @@ export default function Config() {
             return;
         }
 
-        // Save params to Cookies
-        nookies.set(null, 'params', JSON.stringify({ salario }), {
-            maxAge: 30 * 24 * 60 * 60, // 30 days
-        });
+        // // Save params to Cookies
+        // nookies.set(null, 'params', JSON.stringify({ salario }), {
+        //     maxAge: 30 * 24 * 60 * 60, // 30 days
+        // });
 
         alert('Parâmetros salvos com sucesso!');
     }
@@ -64,9 +64,9 @@ export default function Config() {
                 </div>
 
                 <button className="btn btn-primary mt-4">Salvar</button>
-                <Link href="/">
+                <a href="/">
                     <button type="button" className="btn btn-outline-secondary mt-4 mx-2">Voltar</button>
-                </Link>
+                </a>
             </form>
         </>
     )

@@ -1,4 +1,5 @@
-import { Funcionario } from "@/types/funcionario"
+import { Funcionario } from "../../types/funcionario"
+
 
 interface FuncionarioProps {
     funcionario: Funcionario

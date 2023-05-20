@@ -1,21 +1,21 @@
-import Funcionarios from "@/components/Funcionarios";
-import { Funcionario } from "@/types/funcionario";
-import Link from "next/link";
-import nookies from 'nookies';
+import { useEffect, useState } from "react";
+
+import Funcionarios from "../../components/Funcionarios";
+import { Funcionario } from "../../types/funcionario";
 
 
-export default async function Home() {
-  const funcionarios: Funcionario[] = [];
+export default function Home() {
+  const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
 
-  const cookies = nookies.get(null, 'params');
-  const params: { salario: string } = JSON.parse(cookies.params || '{}');
+  async function getFuncionarios() {
+    const response = await fetch('http://127.0.0.1:8000/api/func');
+    const data = await response.json();
+    return data;
+  }
 
-  // function totalSalarios() {
-  //   const salario = params?.salario === 'salario_atual' ? 'salario_atual' : 'salario_anterior';
-  //   return funcionarios.reduce((acc: any, funcionario: { [x: string]: any; }) => acc + funcionario[salario], 0)
-  // }
-
-
+  useEffect(() => {
+    getFuncionarios().then(data => setFuncionarios(data));
+  }, []);
 
   return (
     <div className="row">
@@ -24,9 +24,9 @@ export default async function Home() {
         <h1 className="h2">Dashboard</h1>
         <div className="btn-toolbar mb-2 mb-md-0">
           <div className="btn-group">
-            <Link href="/config">
+            <a href="/config">
               <button type="button" className="btn btn-sm btn-outline-secondary">Configurar Parâmetros</button>
-            </Link>
+            </a>
 
             <button type="button" className="btn btn-sm btn-outline-secondary">Ajustar Salários</button>
             <button type="button" className="btn btn-sm btn-outline-secondary">Gerar Relatório</button>

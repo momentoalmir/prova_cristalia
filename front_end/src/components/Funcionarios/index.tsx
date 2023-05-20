@@ -1,7 +1,8 @@
-import { Funcionario } from "@/types/funcionario"
+
+import { Funcionario } from "../../types/funcionario"
 import FuncionarioItem from "./FuncionarioItem"
 
-export default async function Funcionarios({ funcionarios } : { funcionarios: Funcionario[] }) {
+export default function Funcionarios({ funcionarios } : { funcionarios: Funcionario[] }) {
     return (
         <>
             <h1>Funcionários</h1>
