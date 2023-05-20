@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import AjusteSalario from "../../components/AjusteSalario";
 import Funcionarios from "../../components/Funcionarios";
 import { Funcionario } from "../../types/funcionario";
+import { getConfigParams } from "../config";
 
 export default function Home() {
   const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
@@ -22,6 +23,24 @@ export default function Home() {
     }, 5000);
   }, []);
 
+  async function gerarRelatorio() {
+    const config = getConfigParams()
+
+    const response = await fetch(`http://127.0.0.1:8000/api/total/${config.salario}`)
+    const data = await response.json()
+
+    alert(`
+      Total de Funcionários: ${data.totalFuncionarios}
+      Total de ${
+        config.salario === 'salario_atual' ? 'Salários Atuais' : 'Salários Anteriores'
+      }: ${
+        Number(data.totalSalarios).toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        })
+      }`)
+  }
+
   return (
     <div className="row">
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -39,10 +58,10 @@ export default function Home() {
 
             <button type="button" className={
               ajustarVisible ? "btn btn-sm btn-secondary" : "btn btn-sm btn-outline-secondary"
-            } onClick={(e) => setAjustarVisible(!ajustarVisible)}>
+            } onClick={() => setAjustarVisible(!ajustarVisible)}>
               Ajustar Salários
             </button>
-            <button type="button" className="btn btn-sm btn-outline-secondary">
+            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={gerarRelatorio}>
               Gerar Relatório
             </button>
             <button

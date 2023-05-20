@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\FuncionarioResource;
 use App\Models\Funcionario;
 use Illuminate\Http\Request;
 
@@ -33,35 +32,36 @@ class FuncionarioController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $funcionario = Funcionario::with('cargo', 'empresa')->findOrFail($id);
+        return response()->json($funcionario);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(string $id, Request $request)
     {
-        $RE = $request->input('RE');
-        $func = Funcionario::where('RE', $RE)
-                    ->update($request->all());
-        return response()->json($func);
+        $funcionario = Funcionario::findOrFail($id);
+        $funcionario->update($request->all());
+
+        return response()->json($funcionario);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $RE = $request->input('RE');
-        $func = Funcionario::where('RE', $RE)
-                    ->update(['status' => 'I']);
-        return response()->json($func);
+        $funcionario = Funcionario::findOrFail($id);
+        $funcionario->delete();
+
+        return response()->json(['message' => 'Funcionário removido com sucesso']);
     }
 
     /**
-     * Ajust salaries.
+     * Ajustar salários.
      */
-    public function ajustSalaries(float $percentual, float $bonus)
+    public function ajustarSalarios(float $percentual, float $bonus)
     {
         $funcionarios = Funcionario::all();
 
@@ -83,6 +83,29 @@ class FuncionarioController extends Controller
 
         return response()->json([
             'message' => 'Salários ajustados com sucesso!',
+            'status' => true
+        ], 200);
+    }
+
+    /**
+     * Total salarios.
+     */
+    public function totalSalarios(string $salario)
+    {
+        $funcionarios = Funcionario::all();
+        $total = 0;
+
+        foreach ($funcionarios as $funcionario) {
+            if ($salario == 'salario_atual') {
+                $total += $funcionario->salario_atual;
+            } else if ($salario == 'salario_anterior') {
+                $total += $funcionario->salario_anterior;
+            }
+        }
+
+        return response()->json([
+            'totalFuncionarios' => count($funcionarios),
+            'totalSalarios' => $total,
             'status' => true
         ], 200);
     }

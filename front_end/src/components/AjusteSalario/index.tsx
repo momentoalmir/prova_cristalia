@@ -23,6 +23,8 @@ export default function AjusteSalario() {
       alert(data.error);
       return;
     }
+
+    alert(data.message);
   }
 
   return (

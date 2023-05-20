@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::resource('/func', FuncionarioController::class)->except(['create', 'edit']);
 
 // Ajuste de salários
-Route::post('/ajuste/{percentual}/{bonus}', [FuncionarioController::class, 'ajustSalaries']);
+Route::post('/ajuste/{percentual}/{bonus}', [FuncionarioController::class, 'ajustarSalarios']);
 
-// Cargos
-Route::resource('/cargo', CargoController::class)->except(['create', 'edit']);
+// Obter total de salários (salario_atual ou salario_anterior)
+Route::get('/total/{salario}', [FuncionarioController::class, 'totalSalarios']);
+
