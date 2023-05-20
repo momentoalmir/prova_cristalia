@@ -1,17 +1,10 @@
+import { Funcionario } from "@/types/funcionario"
+
 interface FuncionarioProps {
-    funcionario: {
-        RE: number,
-        nome: string,
-        cargo: {
-            descricao: string
-        },
-        salario_atual: number,
-        salario_anterior: number
-    }
+    funcionario: Funcionario
 }
 
 export default function FuncionarioItem({ funcionario } : FuncionarioProps) {
-
     return (
         <>
             <tr>
