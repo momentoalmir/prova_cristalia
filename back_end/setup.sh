@@ -1,19 +1,25 @@
 #!/bin/bash
 
-# Copiar arquivo .env.example para .env
+# Copy the .env.example file to .env
 cp .env.example .env
 
-# Instalar dependências
+# Install dependencies
 composer install
 
-# Gerar chave da aplicação
-php artisan key:generate
+# Install node dependencies
+npm install
 
-# Criar banco de dados
-php artisan migrate
+# # Run the tests
+# ./vendor/bin/sail artisan test
 
-# Popular banco de dados
-php artisan db:seed
+# Run the application
+./vendor/bin/sail up -d
 
-# Rodar servidor
-php artisan serve
+# # Generate an app key
+./vendor/bin/sail artisan key:generate
+
+# Run the migrations (tables and columns)
+./vendor/bin/sail artisan migrate
+
+# Run the seeders (insert data into tables)
+./vendor/bin/sail artisan db:seed
