@@ -5,7 +5,7 @@ import Funcionarios from "../../components/Funcionarios";
 import SimpleModal from "../../components/Modal";
 
 import { useInterval } from "usehooks-ts";
-import NovoFuncionarioForm from "../../components/NovoFuncionarioForm";
+import NovoFuncionarioForm from "../../components/Funcionarios/NovoFuncionarioForm";
 import { Funcionario } from "../../types/funcionario";
 import { getConfigParams } from "../config";
 

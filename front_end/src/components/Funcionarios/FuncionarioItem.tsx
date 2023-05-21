@@ -1,5 +1,5 @@
 import { Funcionario } from "../../types/funcionario"
-import EditarFormularioForm from "../EditarFormulatioForm"
+import EditarFormularioForm from "./EditarFormularioForm"
 
 interface FuncionarioProps {
     funcionario: Funcionario
