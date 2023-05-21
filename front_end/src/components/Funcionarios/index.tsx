@@ -20,6 +20,14 @@ export default function Funcionarios({ funcionarios } : { funcionarios: Funciona
                         </tr>
                     </thead>
                     <tbody>
+                        {funcionarios.length === 0 && (
+                            <tr>
+                                <td colSpan={5} className="text-center">
+                                    <h4>Nenhum Funcionário Cadastrado</h4>
+                                </td>
+                            </tr>
+                        )}
+
                         {funcionarios.map((funcionario) => (
                             <FuncionarioItem key={funcionario.RE} funcionario={funcionario} />
                         ))}
