@@ -5,6 +5,7 @@ services:
     image: mysql:latest
     restart: always
     environment:
+    # Mudar isso em produção
       MYSQL_ROOT_PASSWORD:
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
     ports:
