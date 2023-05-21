@@ -1,6 +1,7 @@
-import { formatarSalario } from "../../hooks/utils";
+import { formatarSalario } from "../../utils/salariesFormats";
 
 import { Funcionario } from "../../types/funcionario";
+import { fetchAPI } from "../../utils/api";
 import EditarFormularioForm from "./EditarFormularioForm";
 
 interface FuncionarioProps {
@@ -27,11 +28,9 @@ export default function FuncionarioItem({ funcionario }: FuncionarioProps) {
                                     "Deseja realmente excluir este funcionário?"
                                 )
                             ) {
-                                await fetch(
-                                    `http://127.0.0.1:8000/api/func/${funcionario.id}`,
-                                    {
-                                        method: "DELETE",
-                                    }
+                                await fetchAPI(
+                                    `func/${funcionario.id}`,
+                                    "DELETE"
                                 );
                             }
                         }}

@@ -6,8 +6,9 @@ import SimpleModal from "../../components/Modal";
 
 import { useInterval } from "usehooks-ts";
 import NovoFuncionarioForm from "../../components/Funcionarios/NovoFuncionarioForm";
-import { formatarSalario } from "../../hooks/utils";
 import { Funcionario } from "../../types/funcionario";
+import { fetchAPI } from "../../utils/api";
+import { formatarSalario } from "../../utils/salariesFormats";
 import { getConfigParams } from "../config";
 
 export default function Home() {
@@ -21,9 +22,7 @@ export default function Home() {
     });
 
     async function getFuncionarios() {
-        const response = await fetch("http://127.0.0.1:8000/api/func");
-        const data = await response.json();
-
+        const data = await fetchAPI("func");
         return data;
     }
 
@@ -33,15 +32,14 @@ export default function Home() {
 
     useInterval(() => {
         getFuncionarios().then((data) => setFuncionarios(data));
-    }, 2000);
+    }, 5000);
 
     async function gerarRelatorio() {
         const config = getConfigParams();
 
-        const response = await fetch(
-            `http://127.0.0.1:8000/api/total/${config.salario}`
+        const data: RelatorioSalario = await fetchAPI(
+            `total/${config.salario}`
         );
-        const data: RelatorioSalario = await response.json();
 
         setRelatorioSalario({
             totalSalarios: data.totalSalarios,

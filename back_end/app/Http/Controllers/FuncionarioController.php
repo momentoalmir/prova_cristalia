@@ -12,8 +12,7 @@ class FuncionarioController extends Controller
      */
     public function index()
     {
-        $func = Funcionario::with('cargo', 'empresa')
-            ->where('status', 'A')->get();
+        $func = Funcionario::with('cargo', 'empresa')->where('status', 'A')->get();
 
         return response()->json($func);
     }
@@ -32,7 +31,15 @@ class FuncionarioController extends Controller
             ], 200);
         }
 
-        $func = Funcionario::create($request->all());
+        // Criar novo funcionário
+        $func = Funcionario::create([
+            'empresa' => $request->empresa,
+            'RE' => $request->RE,
+            'nome' => $request->nome,
+            'cargo' => $request->cargo,
+            'status' => $request->status,
+            'salario_atual' => $request->salario_atual
+        ]);
 
         return response()->json([
             'message' => 'Funcionário cadastrado com sucesso!',
@@ -45,7 +52,8 @@ class FuncionarioController extends Controller
      */
     public function show(string $id)
     {
-        $funcionario = Funcionario::with('cargo', 'empresa')->findOrFail($id);
+        $funcionario = Funcionario::with('cargo', 'empresa')->where('id', $id)->first();
+
         return response()->json($funcionario);
     }
 
@@ -54,8 +62,14 @@ class FuncionarioController extends Controller
      */
     public function update(string $id, Request $request)
     {
-        $funcionario = Funcionario::findOrFail($id);
-        $funcionario->update($request->all());
+        $funcionario = Funcionario::where('id', $id)->first();
+        $funcionario->update([
+            'nome' => $request->nome,
+            'cargo' => $request->cargo,
+            'status' => $request->status,
+            'salario_anterior' => $funcionario->salario_atual,
+            'salario_atual' => $request->salario_atual
+        ]);
 
         return response()->json($funcionario);
     }
@@ -65,8 +79,9 @@ class FuncionarioController extends Controller
      */
     public function destroy($id)
     {
-        $funcionario = Funcionario::findOrFail($id);
-        $funcionario->delete();
+        $funcionario = Funcionario::where('id', $id)->first();
+        $funcionario->status = 'D';
+        $funcionario->save();
 
         return response()->json(['message' => 'Funcionário removido com sucesso']);
     }
@@ -76,7 +91,7 @@ class FuncionarioController extends Controller
      */
     public function ajustarSalarios(float $percentual, float $bonus)
     {
-        $funcionarios = Funcionario::all();
+        $funcionarios = Funcionario::where('status', 'A')->get();
 
         foreach ($funcionarios as $funcionario) {
             $salarioAtual = $funcionario->salario_atual;
@@ -105,7 +120,10 @@ class FuncionarioController extends Controller
      */
     public function totalSalarios(string $salario)
     {
-        $funcionarios = Funcionario::all();
+        $funcionarios = cache('funcionarios', now()->addSeconds(10), function () {
+            return Funcionario::where('status', 'A')->get();
+        });
+
         $total = 0;
 
         foreach ($funcionarios as $funcionario) {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Cargo } from "../../types/cargo";
 
 import { Funcionario } from "../../types/funcionario";
+import { fetchAPI } from "../../utils/api";
 import SimpleModal from "../Modal";
 
 const EditarFormularioForm = React.memo(
@@ -59,22 +60,13 @@ const EditarFormularioForm = React.memo(
                     },
                     disabled: btnDisabled,
                     saveChanges: async () => {
-                        await fetch(
-                            `http://127.0.0.1:8000/api/func/${funcionario.id}`,
-                            {
-                                method: "PUT",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                    nome,
-                                    RE: Number(RE),
-                                    cargo: Number(cargo),
-                                    status,
-                                    salario_atual: salario,
-                                }),
-                            }
-                        );
+                        await fetchAPI(`func/${funcionario.id}`, "PUT", {
+                            nome,
+                            RE: Number(RE),
+                            cargo: Number(cargo),
+                            status,
+                            salario_atual: salario,
+                        });
                     },
                 }}
             >

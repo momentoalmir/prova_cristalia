@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Cargo } from "../../types/cargo";
 import { Empresa } from "../../types/empresa";
+import { API_BASE_URL, fetchAPI } from "../../utils/api";
 import SimpleModal from "../Modal";
-
-const API_BASE_URL = "http://127.0.0.1:8000/api";
 
 export default function NovoFuncionarioForm() {
     const [formValues, setFormValues] = useState({
@@ -25,13 +24,12 @@ export default function NovoFuncionarioForm() {
 
     useEffect(() => {
         async function fetchData(url: string, setData: React.Dispatch<any>) {
-            const response = await fetch(url);
-            const data = await response.json();
+            const data = await fetchAPI(url);
             setData(data);
         }
 
-        fetchData(`${API_BASE_URL}/empresas`, setEmpresas);
-        fetchData(`${API_BASE_URL}/cargos`, setCargos);
+        fetchData("empresas", setEmpresas);
+        fetchData("cargos", setCargos);
     }, []);
 
     async function handleSubmit() {

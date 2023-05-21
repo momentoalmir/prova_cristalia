@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import { fetchAPI } from "../../utils/api";
 
 export default function AjusteSalario() {
     const [percentual, setPercentual] = useState<number>(0);
@@ -12,14 +13,7 @@ export default function AjusteSalario() {
             return;
         }
 
-        const response = await fetch(
-            `http://127.0.0.1:8000/api/ajuste/${percentual}/${bonus}`,
-            {
-                method: "POST",
-            }
-        );
-
-        const data = await response.json();
+        const data = await fetchAPI(`ajuste/${percentual}/${bonus}`, "POST");
 
         if (data.error) {
             alert(data.error);

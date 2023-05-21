@@ -16,6 +16,7 @@ class Funcionario extends Model
         'cargo',
         'status',
         'salario_atual',
+        'salario_anterior'
     ];
 
     // Um Funcionario esta em uma empresa
