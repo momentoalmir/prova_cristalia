@@ -6,11 +6,14 @@
 			"azureDnsAutoDetection": true,
 			"installDockerBuildx": true,
 			"version": "latest",
-			"dockerDashComposeVersion": "v1"
+			"dockerDashComposeVersion": "v2"
 		},
 		"ghcr.io/devcontainers/features/node:1": {
 			"nodeGypDependencies": true,
 			"version": "lts"
+		},
+		"ghcr.io/devcontainers-contrib/features/mysql-homebrew:1": {
+			"version": "latest"
 		}
 	}
 }
