@@ -110,9 +110,9 @@ class FuncionarioController extends Controller
 
         foreach ($funcionarios as $funcionario) {
             if ($salario == 'salario_atual') {
-                $total += $funcionario->salario_atual;
+                $total += floatval($funcionario->salario_atual);
             } else if ($salario == 'salario_anterior') {
-                $total += $funcionario->salario_anterior;
+                $total += floatval($funcionario->salario_anterior);
             }
         }
 

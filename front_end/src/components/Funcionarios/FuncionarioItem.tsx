@@ -1,11 +1,16 @@
 import { Funcionario } from "../../types/funcionario"
-
+import EditarFormularioForm from "../EditarFormulatioForm"
 
 interface FuncionarioProps {
     funcionario: Funcionario
 }
 
 export default function FuncionarioItem({ funcionario } : FuncionarioProps) {
+
+    function formatarSalario(salario: string) {
+        return Number(salario).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+    }
+
     return (
         <>
             <tr>
@@ -14,13 +19,13 @@ export default function FuncionarioItem({ funcionario } : FuncionarioProps) {
                 <td>{funcionario.cargo.descricao}</td>
                 <td>{funcionario.empresa.nome}</td>
                 <td>
-                    {Number(funcionario.salario_atual).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                    {formatarSalario(funcionario.salario_atual)}
                 </td>
                 <td>
-                    {Number(funcionario.salario_anterior).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                    {formatarSalario(funcionario.salario_anterior)}
                 </td>
                 <td>
-                    <button className="btn btn-primary m-2">Editar <i className="bi bi-pencil-square"></i></button>
+                    <EditarFormularioForm funcionario={funcionario} />
                     <button className="btn btn-danger"
                         onClick={async () => {
                             if (window.confirm("Deseja realmente excluir este funcionário?")) {

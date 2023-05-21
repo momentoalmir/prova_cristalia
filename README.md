@@ -93,7 +93,7 @@ CREATE TABLE Func (
 
 INSERT INTO Empresa (codigo, nome)
 VALUES
-	(1, 'Cristalia'),
+  (1, 'Cristalia'),
   (2, 'Outra Empresa'),
   (3, '1');
 

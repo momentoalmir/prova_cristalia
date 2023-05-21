@@ -1,90 +1,74 @@
 import { useEffect, useState } from "react";
 import { Cargo } from "../../types/cargo";
-import { Empresa } from "../../types/empresa";
+
+import { Funcionario } from "../../types/funcionario";
 import SimpleModal from "../Modal";
 
-export default function NovoFuncionarioForm() {
+export default function EditarFormularioForm({ funcionario } : { funcionario: Funcionario }) {
   const [nome, setNome] = useState<string>("");
   const [RE, setRe] = useState<number>(0);
-  const [empresa, setEmpresa] = useState<number>(1);
+
   const [cargo, setCargo] = useState<number>(1);
-  const [status, setStatus] = useState<number>(1);
-  const [salario, setSalario] = useState<number>(0);
+  const [status, setStatus] = useState<string>('A');
+  const [salario, setSalario] = useState<string>('0.00');
   const [btnDisabled, setBtnDisabled] = useState<boolean>(true);
 
-  const [empresas, setEmpresas] = useState<Empresa[]>([]);
   const [cargos, setCargos] = useState<Cargo[]>([]);
 
   useEffect(() => {
-    if (nome && RE && empresa && cargo && status && salario) {
+    if (nome && RE && cargo && status && salario) {
       setBtnDisabled(false);
     } else {
       setBtnDisabled(true);
     }
-  }, [nome, RE, empresa, cargo, status, salario]);
+  }, [nome, RE, cargo, status, salario]);
 
   useEffect(() => {
-    async function getEmpresas() {
-      const response = await fetch("http://127.0.0.1:8000/api/empresas");
-      const data = await response.json();
-      setEmpresas(data);
-    }
-
     async function getCargos() {
       const response = await fetch("http://127.0.0.1:8000/api/cargos");
       const data = await response.json();
       setCargos(data);
     }
 
-    getEmpresas();
     getCargos();
+
   }, []);
-
-  async function handleSubmit() {
-    const response = await fetch("http://127.0.0.1:8000/api/func", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nome,
-        RE: Number(RE),
-        empresa: Number(empresa),
-        cargo: Number(cargo),
-        status,
-        salario_atual: (salario).toFixed(2),
-      }),
-    });
-
-    const data = await response.json();
-
-    alert(data.message)
-  }
 
   return (
     <SimpleModal
-      title="Novo funcionário"
+      title="Editar Funcionário"
       btn={{
-        classes: "btn btn-sm btn-secondary",
-        variant: "secondary",
-        style: {
-          marginLeft: "1rem",
-        },
+        classes: "m-2",
+        variant: "primary",
+        style: { marginLeft: "1rem" },
         text: (
           <>
-            Novo Funcionario <i className="bi bi-plus-lg"></i>
+            Editar <i className="bi bi-pencil-square"></i>
           </>
         ),
-        saveChanges: () => handleSubmit(),
-        afterClose: () => {
-          setNome("");
-          setRe(0);
-          setEmpresa(1);
-          setCargo(1);
-          setStatus(1);
-          setSalario(0);
+        beforeOpen: () => {
+            setNome(funcionario.nome);
+            setRe(funcionario.RE);
+            setCargo(funcionario.cargo.id);
+            setStatus(funcionario.status);
+            setSalario(Number(funcionario.salario_atual).toFixed(2));
         },
         disabled: btnDisabled,
+        saveChanges: async () => {
+            await fetch(`http://127.0.0.1:8000/api/func/${funcionario.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nome,
+                    RE: Number(RE),
+                    cargo: Number(cargo),
+                    status,
+                    salario_atual: salario,
+                }),
+            })
+        }
       }}
     >
       <form>
@@ -98,6 +82,7 @@ export default function NovoFuncionarioForm() {
             id="nome"
             placeholder="Nome do funcionário"
             onChange={(e) => setNome(e.target.value)}
+            value={nome}
           />
         </div>
 
@@ -111,24 +96,9 @@ export default function NovoFuncionarioForm() {
             id="re"
             placeholder="0"
             onChange={(e) => setRe(parseInt(e.target.value))}
+            value={RE}
+            disabled={true}
           />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="Empresa" className="form-label">
-            Empresa
-          </label>
-          <select
-            className="form-select"
-            onChange={(e) => setEmpresa(parseInt(e.target.value))}
-            value={empresa}
-          >
-            {empresas.map((empresa) => (
-              <option key={empresa.id} value={empresa.id}>
-                {empresa.nome}
-              </option>
-            ))}
-          </select>
         </div>
 
         <div className="mb-3">
@@ -153,7 +123,7 @@ export default function NovoFuncionarioForm() {
             </label>
             <select
               className="form-select"
-              onChange={(e) => setStatus(parseInt(e.target.value))}
+              onChange={(e) => setStatus(e.target.value)}
               value={status}
             >
               <option value="A">Ativo</option>
@@ -166,11 +136,12 @@ export default function NovoFuncionarioForm() {
             Salário
           </label>
           <input
-            type="number"
+            type="text"
             className="form-control"
             id="salario"
             placeholder="0"
-            onChange={(e) => setSalario(parseInt(e.target.value))}
+            onChange={(e) => setSalario(e.target.value)}
+            value={salario}
           />
         </div>
       </form>

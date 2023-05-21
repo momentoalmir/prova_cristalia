@@ -13,11 +13,14 @@ export default function Home() {
   const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
   const [ajustarVisible, setAjustarVisible] = useState<boolean>(false);
 
-  const [relatorioSalario, setRelatorioSalario] = useState<RelatorioSalario>({ totalSalario: 0, totalFuncionarios: 0, tipoSalario: '' });
+  const [relatorioSalario, setRelatorioSalario] = useState<RelatorioSalario>({
+    totalSalarios: 0, totalFuncionarios: 0, tipoSalario: ''
+  });
 
   async function getFuncionarios() {
     const response = await fetch("http://127.0.0.1:8000/api/func");
     const data = await response.json();
+
     return data;
   }
 
@@ -33,12 +36,10 @@ export default function Home() {
     const config = getConfigParams()
 
     const response = await fetch(`http://127.0.0.1:8000/api/total/${config.salario}`)
-    const data = await response.json()
-
-    console.log(data)
+    const data: RelatorioSalario = await response.json()
 
     setRelatorioSalario({
-      totalSalario: data.total,
+      totalSalarios: data.totalSalarios,
       totalFuncionarios: data.totalFuncionarios,
       tipoSalario: config.salario === 'salario_atual' ? 'Salário Atual' : 'Salário Anterior'
     })
@@ -66,7 +67,7 @@ export default function Home() {
               text: "Gerar Relatório",
               beforeOpen: () => gerarRelatorio()
             }}>
-              Total de salários: {relatorioSalario.totalSalario} <br />
+              Total de salários: {relatorioSalario.totalSalarios.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })} <br />
               Total de funcionários: {relatorioSalario.totalFuncionarios} <br />
               Tipo de salário: {relatorioSalario.tipoSalario}
             </SimpleModal>

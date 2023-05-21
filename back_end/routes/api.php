@@ -34,4 +34,3 @@ Route::post('/ajuste/{percentual}/{bonus}', [FuncionarioController::class, 'ajus
 
 // Obter total de salários (salario_atual ou salario_anterior)
 Route::get('/total/{salario}', [FuncionarioController::class, 'totalSalarios']);
-
