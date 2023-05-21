@@ -1,8 +1,11 @@
+import { Funcionario } from "../../types/funcionario";
+import FuncionarioItem from "./FuncionarioItem";
 
-import { Funcionario } from "../../types/funcionario"
-import FuncionarioItem from "./FuncionarioItem"
-
-export default function Funcionarios({ funcionarios } : { funcionarios: Funcionario[] }) {
+export default function Funcionarios({
+    funcionarios,
+}: {
+    funcionarios: Funcionario[];
+}) {
     return (
         <>
             <h1>Funcionários</h1>
@@ -31,11 +34,14 @@ export default function Funcionarios({ funcionarios } : { funcionarios: Funciona
                         )}
 
                         {funcionarios.map((funcionario) => (
-                            <FuncionarioItem key={funcionario.RE} funcionario={funcionario} />
+                            <FuncionarioItem
+                                key={funcionario.RE}
+                                funcionario={funcionario}
+                            />
                         ))}
                     </tbody>
                 </table>
             </div>
         </>
-    )
+    );
 }

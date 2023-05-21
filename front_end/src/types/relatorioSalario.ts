@@ -1,5 +1,5 @@
 interface RelatorioSalario {
-  totalSalarios: number;
-  totalFuncionarios: number;
-  tipoSalario: string;
+    totalSalarios: number;
+    totalFuncionarios: number;
+    tipoSalario: string;
 }
