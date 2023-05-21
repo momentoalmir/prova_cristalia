@@ -3,49 +3,40 @@ import { Cargo } from "../../types/cargo";
 import { Empresa } from "../../types/empresa";
 import SimpleModal from "../Modal";
 
-export default function NovoFuncionarioForm() {
-    const [nome, setNome] = useState<string>("");
-    const [RE, setRe] = useState<number>(0);
-    const [empresa, setEmpresa] = useState<number>(1);
-    const [cargo, setCargo] = useState<number>(1);
-    const [status, setStatus] = useState<number>(1);
-    const [salario, setSalario] = useState<number>(0);
-    const [btnDisabled, setBtnDisabled] = useState<boolean>(true);
+const API_BASE_URL = "http://127.0.0.1:8000/api";
 
+export default function NovoFuncionarioForm() {
+    const [formValues, setFormValues] = useState({
+        nome: "",
+        RE: 0,
+        empresa: 1,
+        cargo: 1,
+        status: 1,
+        salario: 0,
+    });
+    const [btnDisabled, setBtnDisabled] = useState(true);
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [cargos, setCargos] = useState<Cargo[]>([]);
 
     useEffect(() => {
-        if (nome && RE && empresa && cargo && status && salario) {
-            setBtnDisabled(false);
-        } else {
-            setBtnDisabled(true);
-        }
-    }, [nome, RE, empresa, cargo, status, salario]);
+        const { nome, RE, empresa, cargo, status, salario } = formValues;
+        setBtnDisabled(!(nome && RE && empresa && cargo && status && salario));
+    }, [formValues]);
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const [empresasResponse, cargosResponse] = await Promise.all([
-                    fetch("http://127.0.0.1:8000/api/empresas"),
-                    fetch("http://127.0.0.1:8000/api/cargos"),
-                ]);
-
-                const empresasData = await empresasResponse.json();
-                const cargosData = await cargosResponse.json();
-
-                setEmpresas(empresasData);
-                setCargos(cargosData);
-            } catch (error) {
-                console.error("Erro ao buscar dados:", error);
-            }
+        async function fetchData(url: string, setData: React.Dispatch<any>) {
+            const response = await fetch(url);
+            const data = await response.json();
+            setData(data);
         }
 
-        fetchData();
+        fetchData(`${API_BASE_URL}/empresas`, setEmpresas);
+        fetchData(`${API_BASE_URL}/cargos`, setCargos);
     }, []);
 
     async function handleSubmit() {
-        const response = await fetch("http://127.0.0.1:8000/api/func", {
+        const { nome, RE, empresa, cargo, status, salario } = formValues;
+        const response = await fetch(`${API_BASE_URL}/func`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -79,14 +70,16 @@ export default function NovoFuncionarioForm() {
                         Novo Funcionario <i className="bi bi-plus-lg"></i>
                     </>
                 ),
-                saveChanges: () => handleSubmit(),
+                saveChanges: handleSubmit,
                 afterClose: () => {
-                    setNome("");
-                    setRe(0);
-                    setEmpresa(1);
-                    setCargo(1);
-                    setStatus(1);
-                    setSalario(0);
+                    setFormValues({
+                        nome: "",
+                        RE: 0,
+                        empresa: 1,
+                        cargo: 1,
+                        status: 1,
+                        salario: 0,
+                    });
                 },
                 disabled: btnDisabled,
             }}
@@ -101,7 +94,13 @@ export default function NovoFuncionarioForm() {
                         className="form-control"
                         id="nome"
                         placeholder="Nome do funcionário"
-                        onChange={(e) => setNome(e.target.value)}
+                        onChange={(e) =>
+                            setFormValues((prevValues) => ({
+                                ...prevValues,
+                                nome: e.target.value,
+                            }))
+                        }
+                        value={formValues.nome}
                     />
                 </div>
 
@@ -113,19 +112,31 @@ export default function NovoFuncionarioForm() {
                         type="number"
                         className="form-control"
                         id="re"
-                        placeholder="0"
-                        onChange={(e) => setRe(parseInt(e.target.value))}
+                        placeholder="Registro de Empregado"
+                        onChange={(e) =>
+                            setFormValues((prevValues) => ({
+                                ...prevValues,
+                                RE: Number(e.target.value),
+                            }))
+                        }
+                        value={formValues.RE}
                     />
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="Empresa" className="form-label">
+                    <label htmlFor="empresa" className="form-label">
                         Empresa
                     </label>
                     <select
                         className="form-select"
-                        onChange={(e) => setEmpresa(parseInt(e.target.value))}
-                        value={empresa}
+                        id="empresa"
+                        onChange={(e) =>
+                            setFormValues((prevValues) => ({
+                                ...prevValues,
+                                empresa: Number(e.target.value),
+                            }))
+                        }
+                        value={formValues.empresa}
                     >
                         {empresas.map((empresa) => (
                             <option key={empresa.id} value={empresa.id}>
@@ -136,13 +147,19 @@ export default function NovoFuncionarioForm() {
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="Cargo" className="form-label">
+                    <label htmlFor="cargo" className="form-label">
                         Cargo
                     </label>
                     <select
                         className="form-select"
-                        onChange={(e) => setCargo(parseInt(e.target.value))}
-                        value={cargo}
+                        id="cargo"
+                        onChange={(e) =>
+                            setFormValues((prevValues) => ({
+                                ...prevValues,
+                                cargo: Number(e.target.value),
+                            }))
+                        }
+                        value={formValues.cargo}
                     >
                         {cargos.map((cargo) => (
                             <option key={cargo.id} value={cargo.id}>
@@ -150,33 +167,44 @@ export default function NovoFuncionarioForm() {
                             </option>
                         ))}
                     </select>
-
-                    <div className="mb-3">
-                        <label htmlFor="status" className="form-label">
-                            Status
-                        </label>
-                        <select
-                            className="form-select"
-                            onChange={(e) =>
-                                setStatus(parseInt(e.target.value))
-                            }
-                            value={status}
-                        >
-                            <option value="A">Ativo</option>
-                            <option value="D">Inativo</option>
-                        </select>
-                    </div>
                 </div>
+
+                <div className="mb-3">
+                    <label htmlFor="status" className="form-label">
+                        Status
+                    </label>
+                    <select
+                        className="form-select"
+                        id="status"
+                        onChange={(e) =>
+                            setFormValues((prevValues) => ({
+                                ...prevValues,
+                                status: Number(e.target.value),
+                            }))
+                        }
+                        value={formValues.status}
+                    >
+                        <option value={1}>Ativo</option>
+                        <option value={2}>Inativo</option>
+                    </select>
+                </div>
+
                 <div className="mb-3">
                     <label htmlFor="salario" className="form-label">
-                        Salário
+                        Salário Atual
                     </label>
                     <input
                         type="number"
                         className="form-control"
                         id="salario"
-                        placeholder="0"
-                        onChange={(e) => setSalario(parseInt(e.target.value))}
+                        placeholder="Salário atual do funcionário"
+                        onChange={(e) =>
+                            setFormValues((prevValues) => ({
+                                ...prevValues,
+                                salario: Number(e.target.value),
+                            }))
+                        }
+                        value={formValues.salario}
                     />
                 </div>
             </form>

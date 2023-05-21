@@ -6,6 +6,7 @@ import SimpleModal from "../../components/Modal";
 
 import { useInterval } from "usehooks-ts";
 import NovoFuncionarioForm from "../../components/Funcionarios/NovoFuncionarioForm";
+import { formatarSalario } from "../../hooks/utils";
 import { Funcionario } from "../../types/funcionario";
 import { getConfigParams } from "../config";
 
@@ -87,10 +88,9 @@ export default function Home() {
                             }}
                         >
                             Total de salários:{" "}
-                            {relatorioSalario.totalSalarios.toLocaleString(
-                                "pt-br",
-                                { style: "currency", currency: "BRL" }
-                            )}{" "}
+                            {formatarSalario(
+                                relatorioSalario.totalSalarios.toFixed(2)
+                            )}
                             <br />
                             Total de funcionários:{" "}
                             {relatorioSalario.totalFuncionarios} <br />

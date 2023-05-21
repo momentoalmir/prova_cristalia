@@ -1,3 +1,5 @@
+import { formatarSalario } from "../../hooks/utils";
+
 import { Funcionario } from "../../types/funcionario";
 import EditarFormularioForm from "./EditarFormularioForm";
 
@@ -6,13 +8,6 @@ interface FuncionarioProps {
 }
 
 export default function FuncionarioItem({ funcionario }: FuncionarioProps) {
-    function formatarSalario(salario: string) {
-        return Number(salario).toLocaleString("pt-br", {
-            style: "currency",
-            currency: "BRL",
-        });
-    }
-
     return (
         <>
             <tr>

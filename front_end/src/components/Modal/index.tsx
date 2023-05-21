@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
@@ -17,7 +17,7 @@ interface SimpleModalProps {
     };
 }
 
-export function SimpleModal({ title, children, btn }: SimpleModalProps) {
+const SimpleModal = React.memo(({ title, children, btn }: SimpleModalProps) => {
     const [show, setShow] = useState(false);
 
     const handleClose = () => {
@@ -65,6 +65,6 @@ export function SimpleModal({ title, children, btn }: SimpleModalProps) {
             </Modal>
         </>
     );
-}
+});
 
 export default SimpleModal;
