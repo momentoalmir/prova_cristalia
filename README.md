@@ -139,3 +139,5 @@ INNER JOIN Cargo c ON f.cargo = c.codigo
 INNER JOIN Empresa e ON f.empresa = e.codigo
 WHERE e.nome = '1' AND f.disponibilidade = 'A'
 ```
+
+# Autor Gabriel Almir
