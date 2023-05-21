@@ -14,8 +14,11 @@ class EmpresasTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('empresas')->insert([
-            ['nome' => 'Cristália'],
-            ['nome' => 'ConnectCOM']
+            ['nome' => 'Empresa 1'],
+            ['nome' => 'Empresa 2'],
+            ['nome' => 'Empresa 3'],
+            ['nome' => 'Empresa 4'],
+            ['nome' => 'Empresa 5']
         ]);
     }
 }

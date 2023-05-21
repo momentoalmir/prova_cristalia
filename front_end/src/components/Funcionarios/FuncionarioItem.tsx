@@ -9,8 +9,10 @@ export default function FuncionarioItem({ funcionario } : FuncionarioProps) {
     return (
         <>
             <tr>
+                <td>{funcionario.RE}</td>
                 <td>{funcionario.nome}</td>
                 <td>{funcionario.cargo.descricao}</td>
+                <td>{funcionario.empresa.nome}</td>
                 <td>
                     {Number(funcionario.salario_atual).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
                 </td>

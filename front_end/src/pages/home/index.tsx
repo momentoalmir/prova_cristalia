@@ -2,12 +2,18 @@ import { useEffect, useState } from "react";
 
 import AjusteSalario from "../../components/AjusteSalario";
 import Funcionarios from "../../components/Funcionarios";
+import SimpleModal from "../../components/Modal";
+
+import { useInterval } from "usehooks-ts";
+import NovoFuncionarioForm from "../../components/NovoFuncionarioForm";
 import { Funcionario } from "../../types/funcionario";
 import { getConfigParams } from "../config";
 
 export default function Home() {
   const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
   const [ajustarVisible, setAjustarVisible] = useState<boolean>(false);
+
+  const [relatorioSalario, setRelatorioSalario] = useState<RelatorioSalario>({ totalSalario: 0, totalFuncionarios: 0, tipoSalario: '' });
 
   async function getFuncionarios() {
     const response = await fetch("http://127.0.0.1:8000/api/func");
@@ -17,11 +23,11 @@ export default function Home() {
 
   useEffect(() => {
     getFuncionarios().then((data) => setFuncionarios(data));
-
-    setInterval(() => {
-      getFuncionarios().then((data) => setFuncionarios(data));
-    }, 5000);
   }, []);
+
+  useInterval(() => {
+    getFuncionarios().then((data) => setFuncionarios(data));
+  }, 2000)
 
   async function gerarRelatorio() {
     const config = getConfigParams()
@@ -29,16 +35,13 @@ export default function Home() {
     const response = await fetch(`http://127.0.0.1:8000/api/total/${config.salario}`)
     const data = await response.json()
 
-    alert(`
-      Total de Funcionários: ${data.totalFuncionarios}
-      Total de ${
-        config.salario === 'salario_atual' ? 'Salários Atuais' : 'Salários Anteriores'
-      }: ${
-        Number(data.totalSalarios).toLocaleString('pt-BR', {
-          style: 'currency',
-          currency: 'BRL',
-        })
-      }`)
+    console.log(data)
+
+    setRelatorioSalario({
+      totalSalario: data.total,
+      totalFuncionarios: data.totalFuncionarios,
+      tipoSalario: config.salario === 'salario_atual' ? 'Salário Atual' : 'Salário Anterior'
+    })
   }
 
   return (
@@ -46,31 +49,29 @@ export default function Home() {
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 className="h2">Dashboard</h1>
         <div className="btn-toolbar mb-2 mb-md-0">
-          <div className="btn-group">
-            <a href="/config">
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-secondary"
-              >
+          <div className="btn-group" style={{ alignItems: "center" }}>
+            <a href="/config" className="btn btn-sm btn-outline-secondary">
                 Configurar Parâmetros
-              </button>
             </a>
 
-            <button type="button" className={
-              ajustarVisible ? "btn btn-sm btn-secondary" : "btn btn-sm btn-outline-secondary"
-            } onClick={() => setAjustarVisible(!ajustarVisible)}>
-              Ajustar Salários
-            </button>
-            <button type="button" className="btn btn-sm btn-outline-secondary" onClick={gerarRelatorio}>
-              Gerar Relatório
-            </button>
-            <button
-              type="button"
-              className="btn btn-sm btn-secondary"
-              style={{ marginLeft: "1rem" }}
-            >
-              Novo Funcionario <i className="bi bi-plus-lg"></i>
-            </button>
+            <div className="btn-group">
+              <button type="button" className="btn btn-sm btn-outline-secondary" onClick={() => setAjustarVisible(!ajustarVisible)}>
+                Ajustar Salário
+              </button>
+            </div>
+
+            <SimpleModal title="Gerar Relatório" btn={{
+              classes: "btn-sm",
+              variant: "outline-secondary",
+              text: "Gerar Relatório",
+              beforeOpen: () => gerarRelatorio()
+            }}>
+              Total de salários: {relatorioSalario.totalSalario} <br />
+              Total de funcionários: {relatorioSalario.totalFuncionarios} <br />
+              Tipo de salário: {relatorioSalario.tipoSalario}
+            </SimpleModal>
+
+            <NovoFuncionarioForm />
           </div>
         </div>
       </div>

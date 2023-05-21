@@ -12,8 +12,10 @@ export default function Funcionarios({ funcionarios } : { funcionarios: Funciona
                 <table className="table table-striped">
                     <thead>
                         <tr>
+                            <th>RE</th>
                             <th>Nome</th>
                             <th>Cargo</th>
+                            <th>Empresa</th>
                             <th>Salário Atual</th>
                             <th>Salário Anterior</th>
                             <th>Ações</th>
@@ -22,7 +24,7 @@ export default function Funcionarios({ funcionarios } : { funcionarios: Funciona
                     <tbody>
                         {funcionarios.length === 0 && (
                             <tr>
-                                <td colSpan={5} className="text-center">
+                                <td colSpan={7} className="text-center">
                                     <h4>Nenhum Funcionário Cadastrado</h4>
                                 </td>
                             </tr>

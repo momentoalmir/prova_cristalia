@@ -23,8 +23,21 @@ class FuncionarioController extends Controller
      */
     public function store(Request $request)
     {
+        $func = Funcionario::where('RE', $request->RE)->first();
+
+        if ($func) {
+            return response()->json([
+                'message' => 'RE já cadastrado!',
+                'success' => false
+            ], 200);
+        }
+
         $func = Funcionario::create($request->all());
-        return response()->json($func);
+
+        return response()->json([
+            'message' => 'Funcionário cadastrado com sucesso!',
+            'success' => true
+        ], 200);
     }
 
     /**

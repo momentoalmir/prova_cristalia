@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CargoController;
+use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\FuncionarioController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +22,12 @@ use Illuminate\Support\Facades\Route;
 
 // Funcionários
 Route::resource('/func', FuncionarioController::class)->except(['create', 'edit']);
+
+// Empresas
+Route::get('/empresas', [EmpresaController::class, 'index']);
+
+// Cargos
+Route::get('/cargos', [CargoController::class, 'index']);
 
 // Ajuste de salários
 Route::post('/ajuste/{percentual}/{bonus}', [FuncionarioController::class, 'ajustarSalarios']);

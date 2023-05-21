@@ -14,7 +14,8 @@ class Funcionario extends Model
         'RE',
         'nome',
         'cargo',
-        'status'
+        'status',
+        'salario_atual',
     ];
 
     // Um Funcionario esta em uma empresa
