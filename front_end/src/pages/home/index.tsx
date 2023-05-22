@@ -4,6 +4,7 @@ import AjusteSalario from "../../components/AjusteSalario";
 import Funcionarios from "../../components/Funcionarios";
 import SimpleModal from "../../components/Modal";
 
+import { Link } from "react-router-dom";
 import { useInterval } from "usehooks-ts";
 import NovoFuncionarioForm from "../../components/Funcionarios/NovoFuncionarioForm";
 import { Funcionario } from "../../types/funcionario";
@@ -57,12 +58,12 @@ export default function Home() {
                 <h1 className="h2">Dashboard</h1>
                 <div className="btn-toolbar mb-2 mb-md-0">
                     <div className="btn-group" style={{ alignItems: "center" }}>
-                        <a
-                            href="/config"
+                        <Link
+                            to={'/config'}
                             className="btn btn-sm btn-outline-secondary"
                         >
                             Configurar Parâmetros
-                        </a>
+                        </Link>
 
                         <div className="btn-group">
                             <button
@@ -102,7 +103,6 @@ export default function Home() {
 
             {ajustarVisible && <AjusteSalario />}
 
-            {/* @ts-ignore */}
             <Funcionarios funcionarios={funcionarios} />
         </div>
     );

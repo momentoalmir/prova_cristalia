@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Alert from "react-bootstrap/Alert";
+import { Link } from "react-router-dom";
 
 type ParamsType = {
     salario?: string;
@@ -91,14 +92,14 @@ export default function Config() {
                 </div>
 
                 <button className="btn btn-primary mt-4">Salvar</button>
-                <a href="/">
+                <Link to={'/'}>
                     <button
                         type="button"
                         className="btn btn-outline-secondary mt-4 mx-2"
                     >
                         Voltar
                     </button>
-                </a>
+                </Link>
             </form>
 
             <div className="form-messages">
