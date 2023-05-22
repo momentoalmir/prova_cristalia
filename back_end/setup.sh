@@ -1,7 +1,7 @@
 #!/bin/bash
-cp .env.example .env
+# cp .env.example .env
 
-docker compose up -d
+# docker compose up -d
 
 composer i
 
