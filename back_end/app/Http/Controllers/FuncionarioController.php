@@ -121,28 +121,28 @@ class FuncionarioController extends Controller
      */
     public function totalSalarios(string $salario)
     {
-        $tipoSalario = ($salario === 'salario_atual') ? 'salario_atual' : 'salario_anterior';
+        // $tipoSalario = ($salario === 'salario_atual') ? 'salario_atual' : 'salario_anterior';
 
-        $funcionarios = DB::table('funcionarios')
-            ->where('status', 'A')
-            ->select(DB::raw('COUNT(*) as totalFuncionarios, SUM(CAST('.$tipoSalario.' as DECIMAL(10,2))) as totalSalarios'))
-            ->first();
+        // $funcionarios = DB::table('funcionarios')
+        //     ->where('status', 'A')
+        //     ->select(DB::raw('COUNT(*) as totalFuncionarios, SUM(CAST('.$tipoSalario.' as DECIMAL(10,2))) as totalSalarios'))
+        //     ->first();
 
-            // $funcionarios = Funcionario::where('status', 'A')->get();
+            $funcionarios = Funcionario::where('status', 'A')->get();
 
-        // $total = 0;
+        $total = 0;
 
-        // foreach ($funcionarios as $funcionario) {
-        //     if ($salario == 'salario_atual') {
-        //         $total += floatval($funcionario->salario_atual);
-        //     } else if ($salario == 'salario_anterior') {
-        //         $total += floatval($funcionario->salario_anterior);
-        //     }
-        // }
+        foreach ($funcionarios as $funcionario) {
+            if ($salario == 'salario_atual') {
+                $total += floatval($funcionario->salario_atual);
+            } else if ($salario == 'salario_anterior') {
+                $total += floatval($funcionario->salario_anterior);
+            }
+        }
 
         return response()->json([
-            'totalFuncionarios' => $funcionarios->totalFuncionarios,
-            'totalSalarios' => $funcionarios->totalSalarios,
+            'totalFuncionarios' => count($funcionarios),
+            'totalSalarios' => $total,
             'status' => true
         ], 200);
     }
