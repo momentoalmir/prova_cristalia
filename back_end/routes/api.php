@@ -3,6 +3,7 @@
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\FuncionarioController;
+use App\Http\Controllers\RelatorioController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,4 +34,7 @@ Route::get('/cargos', [CargoController::class, 'index']);
 Route::post('/ajuste/{percentual}/{bonus}', [FuncionarioController::class, 'ajustarSalarios']);
 
 // Obter total de salários (salario_atual ou salario_anterior)
-Route::get('/total/{salario}', [FuncionarioController::class, 'totalSalarios']);
+Route::get('/total', [FuncionarioController::class, 'totalSalarios']);
+
+Route::get('/relatorio/{id}', [RelatorioController::class, 'show']);
+Route::put('/relatorio/{id}', [RelatorioController::class, 'update']);

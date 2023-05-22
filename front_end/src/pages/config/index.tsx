@@ -2,22 +2,13 @@ import { useEffect, useState } from "react";
 
 import Alert from "react-bootstrap/Alert";
 import { Link } from "react-router-dom";
+import { fetchAPI } from "../../utils/api";
 
-type ParamsType = {
-    salario?: string;
-};
-
-export const getConfigParams = () => {
-    const localStorage = window.localStorage;
-    const params: ParamsType = JSON.parse(
-        localStorage.getItem("params") || "{}"
-    );
-    return params;
-};
-
-export const setConfigParams = (params: ParamsType) => {
-    const localStorage = window.localStorage;
-    localStorage.setItem("params", JSON.stringify(params));
+export const setConfigParams = async (tipo_salario: string) => {
+    const data = await fetchAPI('relatorio/1', 'PUT', {
+        tipo_salario
+    });
+    console.log(data);
 };
 
 export default function Config() {
@@ -26,9 +17,16 @@ export default function Config() {
     const [errorMessage, setErrorMessage] = useState<string>("none");
 
     useEffect(() => {
-        // Load params
-        const params: ParamsType = getConfigParams();
-        setSalario(params?.salario || "salario_atual");
+        const getConfigParams = async () => {
+            const data: { tipo_salario: string }  = await fetchAPI('relatorio/1');
+            console.log(data);
+
+            setSalario(data.tipo_salario || "salario_atual");
+            
+            return { salario: 'salario_atual' }
+        };
+
+        getConfigParams();
     }, []);
 
     function onClickSalvar(e: React.FormEvent<HTMLFormElement>) {
@@ -42,7 +40,8 @@ export default function Config() {
             return;
         }
 
-        setConfigParams({ salario });
+        console.log(salario);
+        setConfigParams(salario);
 
         setErrorMessage("none");
         setSuccessMessage("block");

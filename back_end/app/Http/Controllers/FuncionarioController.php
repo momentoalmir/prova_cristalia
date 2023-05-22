@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Funcionario;
+use App\Models\Relatorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -119,7 +120,7 @@ class FuncionarioController extends Controller
     /**
      * Total salarios.
      */
-    public function totalSalarios(string $salario)
+    public function totalSalarios()
     {
         // $tipoSalario = ($salario === 'salario_atual') ? 'salario_atual' : 'salario_anterior';
 
@@ -128,9 +129,12 @@ class FuncionarioController extends Controller
         //     ->select(DB::raw('COUNT(*) as totalFuncionarios, SUM(CAST('.$tipoSalario.' as DECIMAL(10,2))) as totalSalarios'))
         //     ->first();
 
-            $funcionarios = Funcionario::where('status', 'A')->get();
+        $funcionarios = Funcionario::where('status', 'A')->get();
 
         $total = 0;
+
+        $relatorio = Relatorio::find(1);
+        $salario = $relatorio->tipo_salario;
 
         foreach ($funcionarios as $funcionario) {
             if ($salario == 'salario_atual') {
@@ -143,6 +147,7 @@ class FuncionarioController extends Controller
         return response()->json([
             'totalFuncionarios' => count($funcionarios),
             'totalSalarios' => $total,
+            'tipoSalario' => $salario,
             'status' => true
         ], 200);
     }

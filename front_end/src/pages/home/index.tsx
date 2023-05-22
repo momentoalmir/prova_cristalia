@@ -10,7 +10,7 @@ import NovoFuncionarioForm from "../../components/Funcionarios/NovoFuncionarioFo
 import { Funcionario } from "../../types/funcionario";
 import { fetchAPI } from "../../utils/api";
 import { formatarSalario } from "../../utils/salariesFormats";
-import { getConfigParams } from "../config";
+
 
 export default function Home() {
     const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
@@ -36,17 +36,13 @@ export default function Home() {
     }, 5000);
 
     async function gerarRelatorio() {
-        const config = getConfigParams();
-
-        const data: RelatorioSalario = await fetchAPI(
-            `total/${config.salario}`
-        );
+        const data: RelatorioSalario = await fetchAPI(`total`);
 
         setRelatorioSalario({
             totalSalarios: data.totalSalarios,
             totalFuncionarios: data.totalFuncionarios,
             tipoSalario:
-                config.salario === "salario_atual"
+                data.tipoSalario === "salario_atual"
                     ? "Salário Atual"
                     : "Salário Anterior",
         });
